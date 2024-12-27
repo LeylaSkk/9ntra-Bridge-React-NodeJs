@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import all_courses from '../Components/Assets/course';
 import { Pencil, Trash2, Plus } from 'lucide-react';
+import './CSS/AdminDashboard.css';
 
 const AdminDashboard = () => {
   const [courses, setCourses] = useState(all_courses);
@@ -38,12 +39,10 @@ const AdminDashboard = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingCourse) {
-      // Update existing course
       setCourses(prev => prev.map(course => 
         course.id === editingCourse.id ? { ...formData, id: course.id } : course
       ));
     } else {
-      // Add new course
       setCourses(prev => [...prev, { ...formData, id: Date.now() }]);
     }
     handleCloseModal();
@@ -66,43 +65,44 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Course Management</h1>
+    <div className="admin-dashboard">
+      <div className="dashboard-header">
+        <h1 className="dashboard-title">Course Management</h1>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+          className="add-button custom-button"
         >
           <Plus size={20} />
           Add New Course
         </button>
       </div>
 
-      {/* Course List */}
-      <div className="grid gap-4">
+      <div className="course-grid">
         {courses.map(course => (
-          <div key={course.id} className="flex items-center justify-between p-4 bg-white rounded-lg shadow">
-            <div className="flex items-center gap-4">
-              <img
-                src={course.image}
-                alt={course.name}
-                className="w-16 h-16 object-cover rounded"
-              />
-              <div>
-                <h3 className="font-semibold">{course.name}</h3>
-                <p className="text-gray-600">{course.price} DT/Month</p>
+          <div key={course.id} className="course-card">
+            <div className="course-content">
+              <div className="course-image">
+                <img
+                  src={course.image}
+                  alt={course.name}
+                  className="course-img"
+                />
+              </div>
+              <div className="course-details">
+                <h3 className="course-name">{course.name}</h3>
+                <p className="course-price">{course.price} DT/Month</p>
               </div>
             </div>
-            <div className="flex gap-2">
+            <div className="course-actions">
               <button
                 onClick={() => handleEdit(course)}
-                className="p-2 text-blue-500 hover:bg-blue-50 rounded"
+                className="edit-button custom-button"
               >
                 <Pencil size={20} />
               </button>
               <button
                 onClick={() => handleDelete(course.id)}
-                className="p-2 text-red-500 hover:bg-red-50 rounded"
+                className="delete-button custom-button"
               >
                 <Trash2 size={20} />
               </button>
@@ -111,56 +111,57 @@ const AdminDashboard = () => {
         ))}
       </div>
 
-      {/* Modal Form */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">
+        <div className="modal-backdrop">
+          <div className="modal-content">
+            <h2 className="modal-title">
               {editingCourse ? 'Edit Course' : 'Add New Course'}
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block mb-1">Course Name</label>
+            <form onSubmit={handleSubmit} className="course-form">
+              <div className="form-group">
+                <label className="form-label">Course Name</label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="form-input"
                   required
                 />
               </div>
-              <div>
-                <label className="block mb-1">Price (DT/Month)</label>
+              <div className="form-group">
+                <label className="form-label">Price (DT/Month)</label>
                 <input
                   type="number"
                   name="price"
                   value={formData.price}
                   onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
+                  className="form-input"
                   required
                 />
               </div>
-              <div>
-                <label className="block mb-1">Course Image</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="w-full p-2 border rounded"
-                />
+              <div className="form-group">
+                <label className="form-label">Course Image</label>
+                <div className="file-input-wrapper">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="file-input"
+                  />
+                </div>
               </div>
-              <div className="flex gap-2 justify-end">
+              <div className="modal-actions">
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
+                  className="cancel-button custom-button"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  className="submit-button custom-button"
                 >
                   {editingCourse ? 'Update' : 'Add'} Course
                 </button>

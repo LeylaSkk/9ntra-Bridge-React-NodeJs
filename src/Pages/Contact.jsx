@@ -4,9 +4,8 @@ const Contact = () =>{
 
     return(
         <div>
-
+            
         </div>
     )
 }
-
-export default Contact
+export default Contact;

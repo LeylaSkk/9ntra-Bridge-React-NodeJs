@@ -1,0 +1,56 @@
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Align items to the edges */
+    align-items: center; /* Vertically center items */
+    padding: 16px 24px; /* Add some horizontal padding */
+    box-shadow: 0 1px 3px -2px white;
+}
+
+.nav-logo img {
+    height: 60px; /* Increase the size of the logo */
+    object-fit: contain; /* Maintain aspect ratio */
+}
+
+.nav-login-cart {
+    display: flex;
+    align-items: center; /* Center elements vertically */
+    gap: 44px; /* Add spacing between the button and cart icon */
+}
+
+.nav-login-cart img {
+    height: 50px; /* Reduce the size of the cart icon */
+    object-fit: contain; /* Maintain aspect ratio */
+}
+
+.nav-login-cart button {
+    width: 140px;
+    height: 45px;
+    outline: none;
+    border: 1px solid #7a7a7a;
+    border-radius: 75px;
+    color: #515151;
+    font-size: 20px;
+    font-weight: 500;
+    background: white;
+    cursor:pointer;
+
+    
+}
+
+.nav-login-cart button:active {
+    background: #f3f3f3; /* Darker color on hover */
+}
+ 
+.nav-cart-count{
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -35px;
+    margin-left: -55px;
+    border-radius: 11px;
+    font-size: 14px;
+    background: red;
+    color: white;
+}

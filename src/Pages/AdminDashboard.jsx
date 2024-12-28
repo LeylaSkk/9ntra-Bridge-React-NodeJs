@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import all_courses from '../Components/Assets/course';
+import React, { useState, useEffect } from 'react';
 import { Pencil, Trash2, Plus } from 'lucide-react';
+import all_courses from '../Components/Assets/course';
 import './CSS/AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -38,23 +38,50 @@ const AdminDashboard = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     if (editingCourse) {
+      // Update existing course
       setCourses(prev => prev.map(course => 
-        course.id === editingCourse.id ? { ...formData, id: course.id } : course
+        course.id === editingCourse.id 
+          ? { 
+              ...course,
+              name: formData.name,
+              price: formData.price,
+              image: formData.image || course.image // Keep existing image if no new one uploaded
+            } 
+          : course
       ));
     } else {
-      setCourses(prev => [...prev, { ...formData, id: Date.now() }]);
+      // Add new course
+      setCourses(prev => [...prev, { 
+        ...formData, 
+        id: Date.now(),
+        image: formData.image
+      }]);
     }
+    
+    // Save to localStorage to persist changes
+    localStorage.setItem('courses', JSON.stringify(courses));
+    
     handleCloseModal();
   };
 
   const handleDelete = (id) => {
     setCourses(prev => prev.filter(course => course.id !== id));
+    // Update localStorage
+    localStorage.setItem('courses', JSON.stringify(
+      courses.filter(course => course.id !== id)
+    ));
   };
 
   const handleEdit = (course) => {
     setEditingCourse(course);
-    setFormData(course);
+    setFormData({
+      id: course.id,
+      name: course.name,
+      price: course.price,
+      image: course.image
+    });
     setIsModalOpen(true);
   };
 
@@ -63,6 +90,19 @@ const AdminDashboard = () => {
     setEditingCourse(null);
     setFormData({ id: '', name: '', price: '', image: null });
   };
+
+  // Load courses from localStorage on initial render
+  useEffect(() => {
+    const savedCourses = localStorage.getItem('courses');
+    if (savedCourses) {
+      setCourses(JSON.parse(savedCourses));
+    }
+  }, []);
+
+  // Save courses to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('courses', JSON.stringify(courses));
+  }, [courses]);
 
   return (
     <div className="admin-dashboard">

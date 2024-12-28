@@ -10,11 +10,13 @@ import SignUp from './Pages/SignUp';
 import { CartProvider } from './Context/CartContext';
 import AdminDashboard from './Pages/AdminDashboard';
 import { AuthProvider } from './Context/AuthContext';
+import { CourseProvider } from './Context/CourseContext';
 
 function App() {
   return (
     <AuthProvider>
     <CartProvider>
+    <CourseProvider>
       <div>
         <BrowserRouter>
           <Navbar />
@@ -30,6 +32,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
+      </CourseProvider>
     </CartProvider>
     </AuthProvider>
   );

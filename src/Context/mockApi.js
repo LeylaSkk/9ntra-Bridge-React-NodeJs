@@ -1,11 +1,17 @@
 export const mockApi = {
-    users: [], // This will store our users
+    get users() {
+        return JSON.parse(localStorage.getItem('mockUsers') || '[]');
+    },
+    
+    set users(value) {
+        localStorage.setItem('mockUsers', JSON.stringify(value));
+    },
 
     login: async (email, password) => {
-        // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        const user = mockApi.users.find(u => 
+        const users = mockApi.users;
+        const user = users.find(u => 
             u.email === email && u.password === password
         );
         
@@ -13,17 +19,15 @@ export const mockApi = {
             throw new Error('Invalid email or password');
         }
         
-        // Don't send password back to client
         const { password: _, ...userWithoutPassword } = user;
         return { user: userWithoutPassword };
     },
 
     signup: async (fullName, email, password) => {
-        // Simulate network delay
         await new Promise(resolve => setTimeout(resolve, 1000));
         
-        // Check if user already exists
-        if (mockApi.users.some(u => u.email === email)) {
+        const users = mockApi.users;
+        if (users.some(u => u.email === email)) {
             throw new Error('User already exists');
         }
         
@@ -34,9 +38,8 @@ export const mockApi = {
             password
         };
         
-        mockApi.users.push(newUser);
+        mockApi.users = [...users, newUser];
         
-        // Don't send password back to client
         const { password: _, ...userWithoutPassword } = newUser;
         return { user: userWithoutPassword };
     }

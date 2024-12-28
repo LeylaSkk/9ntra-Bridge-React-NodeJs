@@ -10,7 +10,8 @@ const SignUp = () => {
         password: '',
         agreeToTerms: false
     });
-    const { signup, loading, error } = useAuth();
+    const { signup, loading, error: authError } = useAuth();
+    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -19,13 +20,18 @@ const SignUp = () => {
             ...prev,
             [name]: type === 'checkbox' ? checked : value
         }));
+        setError(''); // Clear error when user types
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+
         if (!formData.agreeToTerms) {
+            setError('Please agree to the Terms of Use and Privacy Policy');
             return;
         }
+
         const success = await signup(formData.fullName, formData.email, formData.password);
         if (success) {
             navigate('/');
@@ -44,7 +50,7 @@ const SignUp = () => {
                                 type="text"
                                 name="fullName"
                                 value={formData.fullName}
-                                onChange={handleChange}
+                                onChange={handleChange} // Added onChange handler
                                 placeholder="Enter your full name"
                                 required
                             />
@@ -55,7 +61,7 @@ const SignUp = () => {
                                 type="email"
                                 name="email"
                                 value={formData.email}
-                                onChange={handleChange}
+                                onChange={handleChange} // Added onChange handler
                                 placeholder="Enter your email address"
                                 required
                             />
@@ -66,7 +72,7 @@ const SignUp = () => {
                                 type="password"
                                 name="password"
                                 value={formData.password}
-                                onChange={handleChange}
+                                onChange={handleChange} // Added onChange handler
                                 placeholder="Create a password"
                                 required
                             />
@@ -78,15 +84,23 @@ const SignUp = () => {
                             id="terms"
                             name="agreeToTerms"
                             checked={formData.agreeToTerms}
-                            onChange={handleChange}
+                            onChange={handleChange} // Added onChange handler
                             required
                         />
                         <label htmlFor="terms">
                             I agree to the <a href="/terms">Terms of Use</a> and <a href="/privacy">Privacy Policy</a>.
                         </label>
                     </div>
-                    {error && <div className="error-message">{error}</div>}
-                    <button type="submit" className="signup-button" disabled={loading || !formData.agreeToTerms}>
+                    {(error || authError) && (
+                        <div className="error-message">
+                            {error || authError}
+                        </div>
+                    )}
+                    <button
+                        type="submit"
+                        className="signup-button"
+                        disabled={loading || !formData.agreeToTerms}
+                    >
                         {loading ? 'Signing Up...' : 'Sign Up'}
                     </button>
                 </form>

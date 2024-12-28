@@ -1,67 +1,44 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import all_courses from '../Components/Assets/course';
 
 const CourseContext = createContext();
 
 export const CourseProvider = ({ children }) => {
   const [courses, setCourses] = useState([]);
 
-  // Fetch courses from API
-  const fetchCourses = async () => {
-    try {
-      const response = await fetch('/api/courses');
-      const data = await response.json();
-      setCourses(data);
-    } catch (error) {
-      console.error('Error fetching courses:', error);
+  // Load courses from localStorage or default courses if none exist
+  const fetchCourses = () => {
+    const savedCourses = localStorage.getItem('courses');
+    if (savedCourses) {
+      setCourses(JSON.parse(savedCourses));
+    } else {
+      // If no courses in localStorage, use default courses from course.js
+      setCourses(all_courses);
+      localStorage.setItem('courses', JSON.stringify(all_courses));
     }
   };
 
   // Add new course
-  const addCourse = async (courseData) => {
-    try {
-      const response = await fetch('/api/courses', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(courseData),
-      });
-      const newCourse = await response.json();
-      setCourses([...courses, newCourse]);
-    } catch (error) {
-      console.error('Error adding course:', error);
-    }
+  const addCourse = (courseData) => {
+    const newCourses = [...courses, courseData];
+    setCourses(newCourses);
+    localStorage.setItem('courses', JSON.stringify(newCourses));
   };
 
   // Edit course
-  const editCourse = async (id, updatedData) => {
-    try {
-      const response = await fetch(`/api/courses/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
-      });
-      const updatedCourse = await response.json();
-      setCourses(courses.map(course => 
-        course.id === id ? updatedCourse : course
-      ));
-    } catch (error) {
-      console.error('Error updating course:', error);
-    }
+  const editCourse = (id, updatedData) => {
+    const updatedCourses = courses.map(course => 
+      course.id === id ? { ...course, ...updatedData } : course
+    );
+    setCourses(updatedCourses);
+    localStorage.setItem('courses', JSON.stringify(updatedCourses));
   };
 
   // Delete course
-  const deleteCourse = async (id) => {
-    try {
-      await fetch(`/api/courses/${id}`, {
-        method: 'DELETE',
-      });
-      setCourses(courses.filter(course => course.id !== id));
-    } catch (error) {
-      console.error('Error deleting course:', error);
-    }
+  const deleteCourse = (id) => {
+    const filteredCourses = courses.filter(course => course.id !== id);
+    setCourses(filteredCourses);
+    localStorage.setItem('courses', JSON.stringify(filteredCourses));
   };
 
   useEffect(() => {

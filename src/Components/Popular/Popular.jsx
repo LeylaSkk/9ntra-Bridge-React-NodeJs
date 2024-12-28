@@ -1,3 +1,4 @@
+// Modified Popular.jsx
 import React, { useState } from 'react';
 import './Popular.css';
 import Item from '../Item/Item';
@@ -9,7 +10,7 @@ const Popular = () => {
   const displayedCourses = showAll ? courses : courses.slice(0, 6);
 
   return (
-    <div className='popular'>
+    <div className='popular'> {/* Make sure this class is here */}
       <div className='popular-header'>
         <h1>Discover Our Courses</h1>
         <button 
@@ -31,7 +32,7 @@ const Popular = () => {
         ))}
       </div>
     </div>
-  );
+);
 };
 
 export default Popular;

@@ -71,9 +71,49 @@
     background-color: #B83280;
 }
 
-/* Focus states */
+
+/* Add these styles to your existing Contact.css */
+
+.success-message {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.error-message {
+    background-color: #f44336;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.submit-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Optional: Add focus styles for better accessibility */
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(213, 63, 140, 0.2);
+    background-color: #fff;
 }

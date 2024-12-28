@@ -54,3 +54,8 @@
     background: red;
     color: white;
 }
+.error-message {
+    color: #ff4141;
+    margin: 10px 0;
+    text-align: center;
+}
